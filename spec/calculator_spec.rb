@@ -10,40 +10,49 @@ RSpec.describe Calculator do
       calculator.combinations_of(input, target: target).sort_by(&:first).map(&:sort)
     end
 
-    it 'should find the combination for lists with duplicates' do
-      expect(sorted_combinations_of([5, 5, 15, 10], target: 15)).to eq [[0,3], [1,3], [2]]
+    # need more verbose test output for demonstration purposes
+    def verbosely_expect_combinations_of input:, target:, output:
+      result = sorted_combinations_of(input, target: target)
+      if ENV['VERBOSE']
+        puts "combinations_of(#{input.inspect}, target: #{target}) => #{result.inspect}"
+      end
+      expect(result).to eq output
+    end
+
+    it 'should find the combinations for lists with duplicates' do
+      verbosely_expect_combinations_of input: [5, 5, 15, 10], target: 15, output: [[0,3], [1,3], [2]]
     end
 
     it 'should find the combinations for lists without duplicates' do
-      expect(sorted_combinations_of([1, 2, 3, 4], target: 6)).to eq [[0,1,2], [1,3]]
+      verbosely_expect_combinations_of input: [1, 2, 3, 4], target: 6, output: [[0,1,2], [1,3]]
     end
     
     it 'should find the combinations for lists with many duplicates' do
-      expect(sorted_combinations_of([5, 5, 15, 10, 10], target: 15)).to eq [[0,3], [0,4], [1,3], [1,4], [2]]
+      verbosely_expect_combinations_of input: [5, 5, 15, 10, 10], target: 15, output: [[0,3], [0,4], [1,3], [1,4], [2]]
     end
 
     it 'should find the combinations for lists with many values' do
-      expect(sorted_combinations_of([5, 5, 15, 10, 6, 4], target: 15)).to eq [[0,3], [0,4,5], [1,3], [1,4,5], [2]]
+      verbosely_expect_combinations_of input: [5, 5, 15, 10, 6, 4], target: 15, output: [[0,3], [0,4,5], [1,3], [1,4,5], [2]]
     end
 
     it 'should find the combinations for lists with negative numbers' do
-      expect(sorted_combinations_of([5, -5, 0, 3], target: 0)).to eq [[0, 1], [0, 1, 2], [2]]
+      verbosely_expect_combinations_of input: [5, -5, 0, 3], target: 0, output: [[0, 1], [0, 1, 2], [2]]
     end
 
     it 'should find the combinations for lists with a negative target' do
-      expect(sorted_combinations_of([-5, -5, -15, -10, -6, -4], target: -15)).to eq [[0,3], [0,4,5], [1,3], [1,4,5], [2]]
+      verbosely_expect_combinations_of input: [-5, -5, -15, -10, -6, -4], target: -15, output: [[0,3], [0,4,5], [1,3], [1,4,5], [2]]
     end
 
     it 'should find the combinations for lists that require a combination of all numbers' do
-      expect(sorted_combinations_of([1, 2, 3, 4], target: 10)).to eq [[0, 1, 2, 3]]
+      verbosely_expect_combinations_of input: [1, 2, 3, 4], target: 10, output: [[0, 1, 2, 3]]
     end
 
     it 'should find the empty combination set for empty lists' do
-      expect(sorted_combinations_of([], target: 15)).to eq []
+      verbosely_expect_combinations_of input: [], target: 15, output: []
     end
 
     it 'should find the empty combination set for lists that do not have a valid combination' do
-      expect(sorted_combinations_of([1, 2, 3, 4], target: 42)).to eq []
+      verbosely_expect_combinations_of input: [1, 2, 3, 4], target: 42, output: []
     end
   end
 
